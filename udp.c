@@ -15,9 +15,26 @@
 enum e_query_response {QUERY, RESPONSE};
 enum e_opcode {QUERY_CODE, IQUERY, STATUS, EMPTY, NOTIFY, UPDATE};
 
+// http://www-inf.int-evry.fr/~hennequi/CoursDNS/NOTES-COURS_eng/msg.html
+//                                           1  1  1  1  1  1
+//             0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+//           |                      ID                       |
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+//           |QR|   Opcode  |AA|TC|RD|RA| Z|AD|CD|   RCODE   |
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+//           |                    QDCOUNT                    |
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+//           |                    ANCOUNT                    |
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+//           |                    NSCOUNT                    |
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+//           |                    ARCOUNT                    |
+//           +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+
 struct header {
    unsigned short id;
-   unsigned short raw_headers;
+   unsigned short raw_control;
    enum e_query_response qs;
    enum e_opcode opcode;
    unsigned char authoritatvie;
@@ -97,10 +114,10 @@ int main(void)
 
 	struct header h;
 	h.id = get_short(buf, 0);
-	h.raw_headers = get_short(buf, 2);
+	h.raw_control = get_short(buf, 2);
 	printf("DNS Query id: %d\n", h.id);
-	printf("Raw headers bites: ");
-	printBits(h.raw_headers);
+	printf("Raw control bits: ");
+	printBits(h.raw_control);
 	
 	// printf("Third: %04X id is %d\n", val1, val1);
 
