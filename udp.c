@@ -65,7 +65,8 @@ void printBits(unsigned short num)
 
 unsigned short get_short(char *buffer, int position){
 	unsigned short val = *((unsigned short*)(buffer + position));
-	val = (val>>8) | (val<<8); // convert le to be
+	//val = (val>>8) | (val<<8); // convert le to be
+	val = ntohs(val);
 	return val;
 }
 
